@@ -20,14 +20,16 @@ public class MappingExampleApplication {
 		return runner -> {
 //			createInstructor(appService);
 //			findInstructor(appService);
-			deleteInstructor(appService);
+//			deleteInstructor(appService);
+//			findInstructorDetails(appService);
+			deleteInstructorDetails(appService);
 		};
 	}
 
 	private void createInstructor(AppService appService) {
 
 		Instructor instructor =
-				new Instructor("Sana", "Hash", "hash@naveen.com");
+				new Instructor("Hash", "Hash", "hash@naveen.com");
 
 		InstructorDetail instructorDetail =
 				new InstructorDetail("www.google.com", "focus on career");
@@ -55,6 +57,25 @@ public class MappingExampleApplication {
 		System.out.println("Deleting Instructor....");
 
 		appService.deleteInstructor(3);
+
+		System.out.println("Done....");
+	}
+
+	private void findInstructorDetails(AppService appService) {
+
+		InstructorDetail instructorDetail = appService.findInstructorDetail(1);
+
+		System.out.println("Instructor Detail "+instructorDetail);
+
+		System.out.println("Instructor "+instructorDetail.getInstructor());
+
+	}
+
+	private void deleteInstructorDetails(AppService appService) {
+
+		System.out.println("Deleting Instructor Detail....");
+
+		appService.deleteInstructorDetail(5);
 
 		System.out.println("Done....");
 	}
