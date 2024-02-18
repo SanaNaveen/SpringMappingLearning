@@ -1,5 +1,6 @@
 package com.mapping.MappingExample;
 
+import com.mapping.MappingExample.Entity.Course;
 import com.mapping.MappingExample.Entity.Instructor;
 import com.mapping.MappingExample.Entity.InstructorDetail;
 import com.mapping.MappingExample.Service.AppService;
@@ -22,7 +23,8 @@ public class MappingExampleApplication {
 //			findInstructor(appService);
 //			deleteInstructor(appService);
 //			findInstructorDetails(appService);
-			deleteInstructorDetails(appService);
+//			deleteInstructorDetails(appService);
+			createInstructorWithCourses(appService);
 		};
 	}
 
@@ -56,7 +58,7 @@ public class MappingExampleApplication {
 
 		System.out.println("Deleting Instructor....");
 
-		appService.deleteInstructor(3);
+		appService.deleteInstructor(5);
 
 		System.out.println("Done....");
 	}
@@ -78,5 +80,35 @@ public class MappingExampleApplication {
 		appService.deleteInstructorDetail(5);
 
 		System.out.println("Done....");
+	}
+
+	private void createInstructorWithCourses(AppService appService){
+
+		Instructor instructor =
+				new Instructor("Don", "Hawkin", "don@naveen.com");
+
+		InstructorDetail instructorDetail =
+				new InstructorDetail("www.youtube.in", "Hahaha");
+
+		System.out.println("Saving Instructor....");
+
+		instructor.setInstructorDetail(instructorDetail);
+
+		Course course = new Course("Language");
+
+		Course course1 = new Course("Romance");
+
+		Course course2 = new Course("Action");
+
+		System.out.println("Saving Course....");
+
+		instructor.addCourse(course);
+		instructor.addCourse(course1);
+		instructor.addCourse(course2);
+
+		appService.save(instructor);
+
+		System.out.println("Done....");
+
 	}
 }
