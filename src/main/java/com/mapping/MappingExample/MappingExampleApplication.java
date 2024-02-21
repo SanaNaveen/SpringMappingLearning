@@ -3,112 +3,195 @@ package com.mapping.MappingExample;
 import com.mapping.MappingExample.Entity.Course;
 import com.mapping.MappingExample.Entity.Instructor;
 import com.mapping.MappingExample.Entity.InstructorDetail;
+import com.mapping.MappingExample.Entity.Review;
 import com.mapping.MappingExample.Service.AppService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.relational.core.sql.In;
+
+import java.util.List;
 
 @SpringBootApplication
 public class MappingExampleApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(MappingExampleApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(MappingExampleApplication.class, args);
+    }
 
-	@Bean
-	public CommandLineRunner commandLineRunner(AppService appService){
-		return runner -> {
+    @Bean
+    public CommandLineRunner commandLineRunner(AppService appService) {
+        return runner -> {
 //			createInstructor(appService);
 //			findInstructor(appService);
 //			deleteInstructor(appService);
 //			findInstructorDetails(appService);
 //			deleteInstructorDetails(appService);
-			createInstructorWithCourses(appService);
-		};
-	}
+//			createInstructorWithCourses(appService);
+//			findInstructorAndCourses(appService);
+//			findInstructorJoinFetchCourses(appService);
+//			updateInstructor(appService);
+//			deleteInstructorById(appService);
+//          saveCourses(appService);
+            findCourseAndReview(appService);
 
-	private void createInstructor(AppService appService) {
+        };
 
-		Instructor instructor =
-				new Instructor("Hash", "Hash", "hash@naveen.com");
 
-		InstructorDetail instructorDetail =
-				new InstructorDetail("www.google.com", "focus on career");
+    }
 
-		instructor.setInstructorDetail(instructorDetail);
+    private void createInstructor(AppService appService) {
 
-		System.out.println("Saving Instructor....");
+        Instructor instructor =
+                new Instructor("Hash", "Hash", "hash@naveen.com");
 
-		appService.save(instructor);
+        InstructorDetail instructorDetail =
+                new InstructorDetail("www.google.com", "focus on career");
 
-		System.out.println("Done....");
+        instructor.setInstructorDetail(instructorDetail);
 
-	}
+        System.out.println("Saving Instructor....");
 
-	private void findInstructor(AppService appService) {
+        appService.save(instructor);
 
-		Instructor instructor = appService.findInstructor(1);
+        System.out.println("Done....");
 
-		System.out.println(instructor);
+    }
 
-	}
+    private void findInstructor(AppService appService) {
 
-	private void deleteInstructor(AppService appService) {
+        Instructor instructor = appService.findInstructor(1);
 
-		System.out.println("Deleting Instructor....");
+        System.out.println(instructor);
 
-		appService.deleteInstructor(5);
+    }
 
-		System.out.println("Done....");
-	}
+    private void deleteInstructor(AppService appService) {
 
-	private void findInstructorDetails(AppService appService) {
+        System.out.println("Deleting Instructor....");
 
-		InstructorDetail instructorDetail = appService.findInstructorDetail(1);
+        appService.deleteInstructor(5);
 
-		System.out.println("Instructor Detail "+instructorDetail);
+        System.out.println("Done....");
+    }
 
-		System.out.println("Instructor "+instructorDetail.getInstructor());
+    private void findInstructorDetails(AppService appService) {
 
-	}
+        InstructorDetail instructorDetail = appService.findInstructorDetail(1);
 
-	private void deleteInstructorDetails(AppService appService) {
+        System.out.println("Instructor Detail " + instructorDetail);
 
-		System.out.println("Deleting Instructor Detail....");
+        System.out.println("Instructor " + instructorDetail.getInstructor());
 
-		appService.deleteInstructorDetail(5);
+    }
 
-		System.out.println("Done....");
-	}
+    private void deleteInstructorDetails(AppService appService) {
 
-	private void createInstructorWithCourses(AppService appService){
+        System.out.println("Deleting Instructor Detail....");
 
-		Instructor instructor =
-				new Instructor("Don", "Hawkin", "don@naveen.com");
+        appService.deleteInstructorDetail(5);
 
-		InstructorDetail instructorDetail =
-				new InstructorDetail("www.youtube.in", "Hahaha");
+        System.out.println("Done....");
+    }
 
-		System.out.println("Saving Instructor....");
+    private void createInstructorWithCourses(AppService appService) {
 
-		instructor.setInstructorDetail(instructorDetail);
+        Instructor instructor =
+                new Instructor("Don", "Hawkin", "don@naveen.com");
 
-		Course course = new Course("Language");
+        InstructorDetail instructorDetail =
+                new InstructorDetail("www.youtube.in", "Hahaha");
 
-		Course course1 = new Course("Romance");
+        System.out.println("Saving Instructor....");
 
-		Course course2 = new Course("Action");
+        instructor.setInstructorDetail(instructorDetail);
 
-		System.out.println("Saving Course....");
+        Course course = new Course("Language");
 
-		instructor.addCourse(course);
-		instructor.addCourse(course1);
-		instructor.addCourse(course2);
+        Course course1 = new Course("Romance");
 
-		appService.save(instructor);
+        Course course2 = new Course("Action");
 
-		System.out.println("Done....");
+        System.out.println("Saving Course....");
 
-	}
+        instructor.addCourse(course);
+        instructor.addCourse(course1);
+        instructor.addCourse(course2);
+
+        appService.save(instructor);
+
+        System.out.println("Done....");
+
+    }
+
+    private void findInstructorAndCourses(AppService appService) {
+
+        Instructor instructor = appService.findInstructor(6);
+
+        System.out.println("Instructor Details");
+
+        System.out.println(instructor);
+
+        List<Course> courseList = appService.findCourseByInstructorId(6);
+
+        instructor.setCourses(courseList);
+
+        System.out.println("Get Courses");
+
+        System.out.println(instructor.getCourses());
+
+    }
+
+    private void findInstructorJoinFetchCourses(AppService appService) {
+        Instructor instructor = appService.findInstructorByIdJoinFetch(6);
+        System.out.println("Instructor Details");
+        System.out.println(instructor);
+        System.out.println("Get Courses");
+        System.out.println(instructor.getCourses());
+    }
+
+    private void updateInstructor(AppService appService) {
+
+        Instructor instructor = appService.findInstructor(6);
+
+        instructor.setFirstName("Happy");
+
+        System.out.println("Updatation");
+
+        appService.updateInstructor(instructor);
+
+        System.out.println("Done");
+
+    }
+
+    public void deleteInstructorById(AppService appService) {
+
+        System.out.println("Deleting");
+        appService.deleteInstructorById(6);
+        System.out.println("Done");
+
+
+    }
+
+    public void saveCourses(AppService appService) {
+        System.out.println("Course is Saving");
+
+        Course course = new Course("World Of Love");
+
+        course.addReview(new Review("Great Course"));
+        course.addReview(new Review("Loved It"));
+
+		appService.saveCourse(course);
+
+		System.out.println("Done");
+    }
+
+    public void findCourseAndReview(AppService appService) {
+        Course course = appService.findCourseAndReview(4);
+
+        System.out.println("Course :"+ course);
+        System.out.println("Review List :"+ course.getReviews());
+    }
+
 }
